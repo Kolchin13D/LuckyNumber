@@ -1,5 +1,6 @@
 package com.example.luckynumber
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -21,11 +22,17 @@ class SecondActivity : AppCompatActivity() {
             insets
         }
 
+        val share: Button = findViewById(R.id.shareBtn)
+
         var name = receiveName()
         var random = generateNumber()
 
         val text2: TextView = findViewById(R.id.textView2)
         text2.setText("$name, your lucky numer is: \n $random")
+
+        share.setOnClickListener(){
+            shareData(name, random)
+        }
     }
 
     fun receiveName(): String {
@@ -34,8 +41,16 @@ class SecondActivity : AppCompatActivity() {
         return name
     }
 
-    fun generateNumber():Int{
+    fun generateNumber(): Int {
         var luckyNumber = Random.nextInt(5)
         return luckyNumber
+    }
+
+    fun shareData(name: String, num: Int) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.setType("text/plain")
+        intent.putExtra(Intent.EXTRA_SUBJECT, "$name is lucky")
+        intent.putExtra(Intent.EXTRA_TEXT, "My lucky number is: $num")
+        startActivity(intent)
     }
 }
